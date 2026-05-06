@@ -4,9 +4,9 @@
 }
 
 .headerPrincipal {
-    width: 100%;
+    text-decoration: underline;
 }
 
 .parrafoPrincipal {
-    width: 100%;
+    color: green;
 }
