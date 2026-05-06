@@ -1,19 +1,16 @@
 //VARIABLES
 const CLAVE = "carrito"
-const formulario = document.querySelector ("#anadirProducto")
+const formulario = document.querySelector("#anadirProducto")
 
 //EVENTOS
 document.addEventListener("submit", (ev) => {
     ev.preventDefault()
     //recuperar array de objetos (puede traer cosas vacias)
-    const data = leerLocalStorage ()
-    // console.log(data)
+    const data = leerLocalStorage()
     //recuperar objeto añadido al formulario
-    recuperarDato ()
-    //guardar array de objetos
-    anadirLocalStorage (data)
+    recuperarDato()
 
-//evento click para borrar
+    //evento click para borrar
 })
 
 document.addEventListener("click", (ev) => {
@@ -32,11 +29,11 @@ const recuperarDato = () => {
     let cadena = formulario.producto.value;
     // console.log(cadena)
     //si el dato no es valido => mensaje de error alert(Corregir texto))
-   
+
 
     if (cadena == "") {
         alert("Escribe algo para completar el proceso.")
-    return
+        return
     }
     //si dato valido => almacenar dato 
     insertarObjeto(cadena)
@@ -44,53 +41,61 @@ const recuperarDato = () => {
 
 //crear funcion q almacene en el local storage
 const anadirLocalStorage = (data) => {
-//añadir
-localStorage.setItem(CLAVE, JSON.stringify(data))
+    //añadir
+    console.log("para añadir a localStorage")
+    console.log(data)
+    localStorage.setItem(CLAVE, JSON.stringify(data))
 }
 
 //recuperar datos del localStorage
 const leerLocalStorage = () => {
-    // returnna el obj JSON del local
-    let cadena = JSON.parse(localStorage.getItem(CLAVE))
+    // retorna el obj JSON del local
+    let cadena = localStorage.getItem(CLAVE)
 
-    //const data=si el clocalstorage== null que sea un []
-    if (cadena == null){
-       cadena = []; 
+    if (cadena == "") {
+        console.log("retornando []")
+        return []
     }
-    // console.log(cadena)
-return cadena
+
+    let retorno = JSON.parse(cadena)
+    return retorno
 }
 
-//
+//insertar objeto en array
 const insertarObjeto = (dato) => {
-let data = leerLocalStorage()
-//buscar dato en data (find) 
-let encontrado = data.find(producto=>{producto==dato
-//SI existe => cantidad = cantidad +1
-    producto.cantidad++
-    return producto
-})
+    let data = leerLocalStorage()
+    //buscar dato en data (find) 
+    let encontrado = data.find(producto => {
+        producto == dato
+        //SI existe => cantidad = cantidad +1
+        producto.cantidad++
+        return producto
+    })
 
-// NO existe => crar nuevpo objeto 
+    // NO existe => crar nuevo objeto 
 
-let nuevoProducto = {}
-if (encontrado === undefined) {
-    nuevoProducto = {
-                    "id":Date.now,
-                    "nombre": dato,
-                    "cantidad":1
-                }
+    let nuevoProducto = {}
+    if (encontrado === undefined) {
+        nuevoProducto = {
+            "id": Date.now,
+            "nombre": dato,
+            "cantidad": 1
+        }
+    }
+    //crear array nuevo que tenga lo q tenia data (spread) y el nuevo objeto
+    let nuevoData = [...data, nuevoProducto]
+    console.log("valores de data")
+    console.log(data)
+
+    console.log("valor de objeto")
+    console.log(nuevoProducto)
+
+    console.log("data + objeto")
+    console.log(nuevoData)
+    //llamar a guardar en el localstrage con el nuevo array
+    anadirLocalStorage(nuevoData)
+
 }
- //crear array nuevo que tenga lo q tenia data (spread) y el nuevo objeto
-let nuevoData = [...data, nuevoProducto]
-
-//llamar a guardar en el localstrage con el nuevo array
-anadirLocalStorage(nuevoData)
-
-}    
-
-
-
 
 //funcion pintarTabla
 const pintarTabla = () => {
@@ -111,4 +116,4 @@ const eliminarProducto = () => {
 
 
 //LLAMADAS A FUNCIONES(SI HACE FALTA)
-pintarTabla()
+//pintarTabla()
