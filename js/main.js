@@ -1,87 +1,96 @@
 //VARIABLES
 const CLAVE = "carrito"
-const carritoVacio = [
-    { "nombre": "vacio1", "cantidad": 0 },
-    { "nombre": "vacio2", "cantidad": 0 },
-    { "nombre": "vacio3", "cantidad": 0 },
-    { "nombre": "vacio4", "cantidad": 0 },
-    { "nombre": "vacio5", "cantidad": 0 }
-]
-
-const objVacio = { "nombre": "", "cantidad": 0 }
+const formulario = document.querySelector ("#anadirProducto")
 
 //EVENTOS
 document.addEventListener("submit", (ev) => {
     ev.preventDefault()
-    //console.log(ev.target)
-    //console.log(ev.target.producto.value)
-
     //recuperar array de objetos (puede traer cosas vacias)
-    let carritoCompra = JSON.parse(localStorage.getItem(CLAVE) || "[]")
-    console.log("carritocompra: "carritoCompra)
-    //añadir/retirar objeto de formulario
-
-    let producto = ev.target.producto.value;
-
-    //juntar producto y carrito
-    let respuesta = insertarObjeto(producto, carritoCompra)
-
+    const data = leerLocalStorage ()
+    // console.log(data)
+    //recuperar objeto añadido al formulario
+    recuperarDato ()
     //guardar array de objetos
-    console.log("respuesta = " + respuesta)
-})
+    anadirLocalStorage (data)
 
 //evento click para borrar
-document.addEventListener("click", (ev) => {
-    //obtener id elemento clickado
-    //llamara a eliminar pasandole el ID
-    //pintarTabla()
 })
 
+document.addEventListener("click", (ev) => {
+    //obtener id elemento clickado
 
+    //llamara a eliminar pasandole el ID
+
+    //pintarTabla()
+})
 
 //FUNCIONES
 
 /*Recoger y validar dato del formulario */
 const recuperarDato = () => {
     //recoger dato del formulario ()
-
+    let cadena = formulario.producto.value;
+    // console.log(cadena)
     //si el dato no es valido => mensaje de error alert(Corregir texto))
-    //si dato valido => almacenar dato
+   
 
-    //insertarObjeto(dato)
+    if (cadena == "") {
+        alert("Escribe algo para completar el proceso.")
+    return
+    }
+    //si dato valido => almacenar dato 
+    insertarObjeto(cadena)
 }
 
 //crear funcion q almacene en el local storage
-const anadirLocalStorage = () => {
-    //añadir
+const anadirLocalStorage = (data) => {
+//añadir
+localStorage.setItem(CLAVE, JSON.stringify(data))
 }
 
 //recuperar datos del localStorage
 const leerLocalStorage = () => {
     // returnna el obj JSON del local
+    let cadena = JSON.parse(localStorage.getItem(CLAVE))
 
     //const data=si el clocalstorage== null que sea un []
+    if (cadena == null){
+       cadena = []; 
+    }
+    // console.log(cadena)
+return cadena
 }
 
 //
 const insertarObjeto = (dato) => {
+let data = leerLocalStorage()
+//buscar dato en data (find) 
+let encontrado = data.find(producto=>{producto==dato
+//SI existe => cantidad = cantidad +1
+    producto.cantidad++
+    return producto
+})
 
-    const data = leerLocalStorage()
+// NO existe => crar nuevpo objeto 
 
-    //buscar dato en data (find) 
-    //SI existe => cantidad = cantidad +1
-    /*
-    NO existe => crar nuevpo objeto
-                objet {
-                    "id":date.now,
+let nuevoProducto = {}
+if (encontrado === undefined) {
+    nuevoProducto = {
+                    "id":Date.now,
                     "nombre": dato,
                     "cantidad":1
                 }
-    */
-    //crear array nuevo que tenga lo q tenia data (spread) y el nuevo objeto
-    //llamar a guardar en el localstrage con el nuevo array
-
 }
+ //crear array nuevo que tenga lo q tenia data (spread) y el nuevo objeto
+let nuevoData = [...data, nuevoProducto]
+
+//llamar a guardar en el localstrage con el nuevo array
+anadirLocalStorage(nuevoData)
+
+}    
+
+
+
 
 //funcion pintarTabla
 const pintarTabla = () => {
